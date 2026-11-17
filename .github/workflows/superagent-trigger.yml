@@ -1,0 +1,24 @@
+name: superagent-trigger
+on:
+  workflow_dispatch:
+    inputs:
+      request:
+        description: request text posted as the agent bot
+        required: true
+permissions:
+  issues: write
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        env:
+          REQUEST: ${{ inputs.request }}
+          ISSUE: ${{ inputs.issue }}
+        with:
+          script: |
+            const n = Number(process.env.ISSUE || '1')
+            const r = await github.rest.issues.createComment({
+              owner: context.repo.owner, repo: context.repo.repo,
+              issue_number: n, body: process.env.REQUEST })
+            core.info('comment id ' + r.data.id)
