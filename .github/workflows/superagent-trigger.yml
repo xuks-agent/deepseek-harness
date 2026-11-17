@@ -5,6 +5,10 @@ on:
       request:
         description: request text posted as the agent bot
         required: true
+      issue:
+        description: issue number
+        required: false
+        default: "1"
 permissions:
   issues: write
 jobs:
